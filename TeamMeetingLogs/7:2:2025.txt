@@ -1,0 +1,3 @@
+7/2/2025
+
+Joe Webb and David Benson discussed before class a few starting ideas. Also added structure and shells to the repository, making it ready for actual files to be added to it.

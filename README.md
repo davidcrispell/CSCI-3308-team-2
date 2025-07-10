@@ -10,6 +10,6 @@ From **Signup**, you are prompted to access **Registration** and vice versa.
 "Already have an account? -> signup" and "Need to sign up? -> registration"
 
 
-On **Exercises** There are 
-On **Library**, there is 
+On **Workouts** There are 
+On **Library**, There will be a large 
 On **Calendar**

@@ -1,0 +1,19 @@
+Had to install dotenv package module with rpm install dotenv
+
+Had to fix package.json to reference correctly because we're not in root
+"start": "nodemon index.js" changed to "start": "nodemon src/index.js",
+
+Filled in index.js roughly
+
+Created login and register pages, as well as the SQL table storing information from register into users table
+
+Installed cryptjs for password hashing
+
+Copied CREATE.sql into running DB container with:
+docker cp ~/Desktop/FitProjectRepo/ProjectSourceCode/src/init_data/CREATE.sql projectsourcecode-db-1:/CREATE.sql
+
+Logout route clears session and renders logout.hbs
+
+Centered login/register using Bootstrap flex utilities
+
+Updated header.hbs with Bootstrap navbar

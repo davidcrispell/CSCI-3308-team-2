@@ -98,6 +98,49 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Cardio workout routes
+app.get('/cardio', auth, (req, res) => {
+  res.render('Pages/cardio');
+});
+
+app.post('/cardio', auth, async (req, res) => {
+  const { workoutname, date, workoutduration, distance } = req.body;
+  try {
+    await db.none(
+      'INSERT INTO cardiologs (workoutname, date, workoutduration, exercise_categories, distance) VALUES ($1, $2, $3, $4, $5)',
+      [workoutname, date, workoutduration, 'cardio', distance]
+    );
+    res.redirect('/cardio');
+  } catch (err) {
+    console.error('Cardio log error:', err);
+    res.redirect('/cardio');
+  }
+});
+
+// Bodyweight workout routes
+app.get('/bodyweight', auth, (req, res) => {
+  res.render('Pages/bodyweight');
+});
+
+app.post('/bodyweight', auth, async (req, res) => {
+  const { workoutname, exercisename, sets, reps } = req.body;
+  try {
+    await db.none(
+      'INSERT INTO bodyweightlogs (workoutname, exercise_name, sets, reps) VALUES ($1, $2, $3, $4)',
+      [workoutname, exercisename, sets, reps]
+    );
+    res.redirect('/bodyweight');
+  } catch (err) {
+    console.error('Bodyweight log error:', err);
+    res.redirect('/bodyweight');
+  }
+});
+
+// Milestones page
+app.get('/milestones', auth, (req, res) => {
+  res.render('Pages/milestones');
+});
+
 
 // Logout
 app.get('/logout', (req, res) => {

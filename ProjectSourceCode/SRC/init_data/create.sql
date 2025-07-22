@@ -1,20 +1,23 @@
+-- Table for storing user information
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
---Table for storing workout logs
-CREATE TABLE workoutlogs (
-  id INT PRIMARY KEY
+
+
+-- Table for storing workout logs
+CREATE TABLE IF NOT EXISTS workoutlogs (
+  id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL, 
   workoutduration SMALLINT NOT NULL,
   exercise_categories VARCHAR(100) NOT NULL
-  );
+);
 
-CREATE table cardiologs (
-  id INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS cardiologs (
+  id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
   workoutduration SMALLINT NOT NULL,
@@ -22,8 +25,8 @@ CREATE table cardiologs (
   distance FLOAT NOT NULL
 );
 
-CREATE TABLE weigthliftinglogs (
-  id INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS weightliftinglogs (
+  id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,
@@ -31,8 +34,8 @@ CREATE TABLE weigthliftinglogs (
   weight FLOAT NOT NULL
 );
 
-CREATE TABLE bodyweightlogs (
-  id INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS bodyweightlogs (
+  id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,

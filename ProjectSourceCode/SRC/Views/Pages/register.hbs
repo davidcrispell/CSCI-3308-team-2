@@ -20,4 +20,16 @@
       Already have an account? <a href="/login">Login here</a>
     </p>
   </div>
+</div>{{!-- filepath: /home/joseph/Downloads/CSCI-3308-team-2/ProjectSourceCode/SRC/Views/Pages/register.hbs --}}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="container" style="max-width: 500px;">
+    <h2 class="mb-4 text-center">Register</h2>
+    {{#if error}}
+      <div class="alert alert-danger">{{error}}</div>
+    {{/if}}
+    <form method="POST" action="/register">
+      ...existing code...
+    </form>
+    ...existing code...
+  </div>
 </div>

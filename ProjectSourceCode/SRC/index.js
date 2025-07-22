@@ -81,6 +81,11 @@ app.get('/login', (req, res) => {
   res.render('Pages/login');
 });
 
+// Alias for Signup links
+app.get('/signup', (req, res) => {
+  res.render('Pages/login');
+});
+
 // Login POST
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;

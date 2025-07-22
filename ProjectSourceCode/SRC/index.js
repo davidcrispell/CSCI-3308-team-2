@@ -8,6 +8,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const pgp = require('pg-promise')();
 const bcrypt = require('bcryptjs');
+const exercisedb = require('./exercisedb');
 require('dotenv').config();
 
 // ------------------ Express Setup ------------------
@@ -144,6 +145,28 @@ app.post('/bodyweight', auth, async (req, res) => {
 // Milestones page
 app.get('/milestones', auth, (req, res) => {
   res.render('Pages/milestones');
+});
+
+// Movement library using ExerciseDB
+app.get('/movement-library', auth, async (req, res) => {
+  const query = req.query.q || '';
+  try {
+    const exercises = query ? await exercisedb.searchExercises(query) : [];
+    res.render('Pages/movement_library', { exercises, query });
+  } catch (err) {
+    console.error('ExerciseDB error:', err.message);
+    res.render('Pages/movement_library', { exercises: [], query, error: 'Failed to fetch exercises' });
+  }
+});
+
+app.get('/exercise/:id', auth, async (req, res) => {
+  try {
+    const exercise = await exercisedb.getExerciseById(req.params.id);
+    res.render('Pages/exercise_detail', { exercise });
+  } catch (err) {
+    console.error('ExerciseDB fetch error:', err.message);
+    res.redirect('/movement-library');
+  }
 });
 
 

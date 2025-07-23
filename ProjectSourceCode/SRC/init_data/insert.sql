@@ -1,72 +1,70 @@
---initialize the databases with default values for workout logs.
-
+-- Insert initial data into weightliftinglogs (columns matching schema)
 INSERT INTO weightliftinglogs
-  (
-    id,
-    workoutname,
-    date,
-    workoutduration,
-    workoutlog_id,
-    exercise_categories,
-    exercise_name,
-    sets,
-    reps,
-    weight
-  )
-VALUES    
-  (
-    1,
-    'Morning Workout',
-    '2023-10-01',
-    60,
-    1,
-    'Strength Training',
-    'Bench Press',
-    4,
-    10,
-    75.0
-  );
+(
+  workoutname,
+  date,
+  workoutduration,
+  exercise_categories,
+  exercise_name,
+  sets,
+  reps,
+  weight
+)
+VALUES
+(
+  'Morning Workout',
+  '2023-10-01',
+  60, -- example duration in minutes
+  'Chest', -- example category
+  'Bench Press',
+  4,
+  10,
+  75.0
+);
 
+-- Insert initial data into cardiologs
 INSERT INTO cardiologs
   (
-    id,
     workoutname,
     date,
     workoutduration,
-    workoutlog_id,
-    exercise_categories
+    exercise_categories,
     distance
   )
 VALUES
   (
-
+    'Evening Run',
+    '2023-10-02',
+    45,
+    'Cardio',
+    5.0
   );
 
-
+-- Insert initial data into bodyweightlogs
 INSERT INTO bodyweightlogs
-    (
-        id,
-        workoutname,
-        date,
-        workoutduration,
-        workoutlog_id,
-        exercise_categories
-    )
+  (
+    workoutname,
+    exercise_name,
+    sets,
+    reps
+  )
 VALUES
-    (
-    
-    );
--- Table for storing user information
+  (
+    'Bodyweight Routine',
+    'Push-ups',
+    3,
+    15
+  );
+
+-- Insert initial data into users
 INSERT INTO users
   (
-    id,
     name,
     email,
     password
   )
 VALUES
   (
-    1,
     'John Doe',
     'fake@gmail.com',
     '1234'

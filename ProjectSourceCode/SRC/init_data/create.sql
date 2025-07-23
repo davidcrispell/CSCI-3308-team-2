@@ -28,6 +28,9 @@ CREATE TABLE IF NOT EXISTS cardiologs (
 CREATE TABLE IF NOT EXISTS weightliftinglogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
+  date DATE NOT NULL,
+  workoutduration SMALLINT NOT NULL,
+  exercise_categories VARCHAR(100),
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,
   reps SMALLINT NOT NULL,

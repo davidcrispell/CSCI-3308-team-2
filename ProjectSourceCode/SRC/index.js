@@ -142,12 +142,6 @@ app.post('/bodyweight', auth, async (req, res) => {
   }
 });
 
-
-// Workouts GET
-app.get('/workouts', auth, (req, res) => {
-  res.render('Pages/workouts', /*{ user: req.session.user }*/);
-});
-
 // Milestones page
 app.get('/milestones', auth, (req, res) => {
   res.render('Pages/milestones');
@@ -175,6 +169,11 @@ app.get('/exercise/:id', auth, async (req, res) => {
   }
 });
 
+// Calendar page
+app.get('/calendar', auth, (req, res) => {
+  res.render('Pages/calendar');
+});
+   
 
 // Logout
 app.get('/logout', (req, res) => {

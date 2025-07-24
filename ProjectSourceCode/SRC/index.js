@@ -224,6 +224,20 @@ app.get('/exercise/:id', auth, async (req, res) => {
   }
 });
 
+// API endpoint for live exercise search
+app.get('/api/exercises', auth, async (req, res) => {
+  const q = req.query.q || '';
+  if (!q) return res.json({ exercises: [] });
+  try {
+    const results = await exercisedb.searchExercises(q);
+    const exercises = results.slice(0, 10).map(e => ({ id: e.id, name: e.name }));
+    res.json({ exercises });
+  } catch (err) {
+    console.error('Exercise search API error:', err.message);
+    res.status(500).json({ exercises: [] });
+  }
+});
+
 // Calendar page
 app.get('/calendar', auth, async (req, res) => {
   try {

@@ -10,10 +10,15 @@ CREATE TABLE IF NOT EXISTS users (
 -- Table for storing workout logs
 CREATE TABLE IF NOT EXISTS workoutlogs (
   id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
-  date DATE NOT NULL, 
+  date DATE NOT NULL,
   workoutduration SMALLINT NOT NULL,
-  exercise_categories VARCHAR(100) NOT NULL
+  exercise_categories VARCHAR(100) NOT NULL,
+  sets SMALLINT,
+  reps SMALLINT,
+  weight FLOAT,
+  distance FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS cardiologs (

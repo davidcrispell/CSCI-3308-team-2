@@ -12,6 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Set current date for any empty date inputs
+document.addEventListener('DOMContentLoaded', function() {
+  const dateInputs = document.querySelectorAll('input[type="date"]');
+  const today = new Date().toISOString().split('T')[0];
+  dateInputs.forEach(inp => {
+    if (!inp.value) {
+      inp.value = today;
+    }
+  });
+});
+
 // Exercise search for workout logging
 document.addEventListener('DOMContentLoaded', function() {
   const input = document.getElementById('exercisename');

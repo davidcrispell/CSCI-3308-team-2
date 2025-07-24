@@ -58,7 +58,8 @@ const auth = (req, res, next) => {
 app.get('/', auth, async (req, res) => {
   try {
     const logs = await db.any(
-      `SELECT workoutname, date
+      `SELECT workoutname, date, workoutduration, exercise_categories,
+              sets, reps, weight, distance
        FROM workoutlogs
        WHERE user_id = $1 AND date >= CURRENT_DATE - INTERVAL '6 days'
        ORDER BY date`,
@@ -76,7 +77,12 @@ app.get('/', auth, async (req, res) => {
       week.push({ date: ds, logs: dayLogs });
     }
 
-    res.render('Pages/home', { user: req.session.user, week });
+    res.render('Pages/home', {
+      user: req.session.user,
+      week,
+      weekJson: JSON.stringify(week),
+    });
+
   } catch (err) {
     console.error('Home fetch error:', err);
     res.render('Pages/home', { user: req.session.user, week: [] });

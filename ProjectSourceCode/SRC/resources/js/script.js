@@ -70,3 +70,46 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Show logs for a specific day when clicked
+document.addEventListener('DOMContentLoaded', function () {
+  const days = document.querySelectorAll('.week-day');
+  const weekData = window.weekData || [];
+  if (days.length && weekData.length) {
+    days.forEach((el) => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.index, 10);
+        const data = weekData[idx];
+        const modalEl = document.getElementById('day_modal');
+        if (!modalEl || !data) return;
+        modalEl.querySelector('.modal-title').textContent = data.date;
+        const body = modalEl.querySelector('.modal-body');
+        if (!data.logs.length) {
+          body.innerHTML = '<p>No workouts logged.</p>';
+        } else {
+          const items = data.logs
+            .map((log) => {
+              const details = [];
+              if (log.workoutduration) details.push(log.workoutduration + ' min');
+              if (log.exercise_categories) details.push(log.exercise_categories);
+              if (log.sets) details.push(log.sets + ' sets');
+              if (log.reps) details.push(log.reps + ' reps');
+              if (log.weight) details.push(log.weight + ' lbs');
+              if (log.distance) details.push(log.distance + ' miles');
+              return (
+                '<li><strong>' +
+                log.workoutname +
+                '</strong> - ' +
+                details.join(', ') +
+                '</li>'
+              );
+            })
+            .join('');
+          body.innerHTML = '<ul>' + items + '</ul>';
+        }
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+      });
+    });
+  }
+});
+

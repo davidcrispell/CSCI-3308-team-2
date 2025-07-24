@@ -5,11 +5,31 @@
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   if (calendarEl) {
+    var events = Array.isArray(window.workoutLogs)
+      ? window.workoutLogs.map(log => ({ title: log.workoutname, start: log.date }))
+      : [];
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+      },
+      events: events
     });
     calendar.render();
   }
+});
+
+// Set current date for any empty date inputs
+document.addEventListener('DOMContentLoaded', function() {
+  const dateInputs = document.querySelectorAll('input[type="date"]');
+  const today = new Date().toISOString().split('T')[0];
+  dateInputs.forEach(inp => {
+    if (!inp.value) {
+      inp.value = today;
+    }
+  });
 });
 
 // Exercise search for workout logging

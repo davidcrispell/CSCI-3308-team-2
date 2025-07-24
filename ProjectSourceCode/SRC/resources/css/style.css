@@ -17,3 +17,33 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
+
+#calendar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.fc-toolbar-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.fc .fc-button-primary {
+    background-color: #ff3b30;
+    border-color: #ff3b30;
+}
+
+.fc-daygrid-day-number {
+    font-weight: 600;
+}
+
+.fc-daygrid-event {
+    background-color: #ff3b30;
+    border: none;
+    padding: 2px 4px;
+}

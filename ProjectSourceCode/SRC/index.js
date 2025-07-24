@@ -245,7 +245,7 @@ app.get('/calendar', auth, async (req, res) => {
       'SELECT * FROM workoutlogs WHERE user_id = $1 ORDER BY date DESC',
       [req.session.user.id]
     );
-    res.render('Pages/calendar', { logs });
+    res.render('Pages/calendar', { logs, logsJson: JSON.stringify(logs) });
   } catch (err) {
     console.error('Fetch calendar error:', err);
     res.render('Pages/calendar', { logs: [] });

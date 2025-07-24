@@ -69,3 +69,29 @@ VALUES
     'fake@gmail.com',
     '1234'
   );
+
+-- Sample workout log linked to user
+INSERT INTO workoutlogs
+  (
+    user_id,
+    workoutname,
+    date,
+    workoutduration,
+    exercise_categories,
+    sets,
+    reps,
+    weight,
+    distance
+  )
+VALUES
+  (
+    1,
+    'Sample Workout',
+    '2023-10-03',
+    30,
+    'Cardio',
+    NULL,
+    NULL,
+    NULL,
+    3.0
+  );

@@ -36,11 +36,13 @@ nav a:hover {
 .fc .fc-button-primary {
     background-color: #ff453a;
     border-color: #ff453a;
+
 }
 
 .fc-daygrid-day-number {
     font-weight: 600;
     color: #1c1c1e;
+
 }
 
 .fc-daygrid-event {
@@ -55,3 +57,4 @@ nav a:hover {
     padding: 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+

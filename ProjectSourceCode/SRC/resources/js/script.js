@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
           start: log.date,
           extendedProps: { notes: log.notes }
         }))
+
       : [];
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
           alert(info.event.title + '\n' + info.event.extendedProps.notes);
         }
       }
+
     });
     calendar.render();
   }

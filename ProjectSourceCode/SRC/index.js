@@ -82,6 +82,7 @@ app.get('/', auth, async (req, res) => {
       week,
       weekJson: JSON.stringify(week),
     });
+
   } catch (err) {
     console.error('Home fetch error:', err);
     res.render('Pages/home', { user: req.session.user, week: [] });

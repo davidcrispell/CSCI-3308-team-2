@@ -4,7 +4,6 @@
 <nav>
     <ul>
         <li><a href="/register">Registration</a></li>
-        <li><a href="/calendar">Calendar</a></li>
         <li><a href="/milestones">Milestones</a></li>
         <li><a href="/movement-library">Movement Library</a></li>
         <li><a href="/logout">Logout</a></li>
@@ -18,6 +17,21 @@
     <li><a href="/bodyweight">Bodyweight Workouts</a></li>
     <li><a href="/weightlifting">Weightlifting Workouts</a></li>
 </ul>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between week-view">
+    {{#each week}}
+    <div class="week-day flex-fill mx-1 p-2 border rounded text-center" data-index="{{@index}}">
+      <strong>{{date}}</strong>
+      <ul class="list-unstyled mb-0">
+        {{#each logs}}
+        <li>{{workoutname}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/each}}
+  </div>
+</div>
 
 <div class="container mt-4 d-flex justify-content-center">
   <form id="log_form" method="POST" action="/log-workout" class="row row-cols-lg-auto g-3 align-items-center justify-content-center">
@@ -58,4 +72,19 @@
     </div>
   </form>
 </div>
+
+<div class="modal fade" id="day_modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Day Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>window.weekData = {{{weekJson}}};</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src='/resources/js/script.js'></script>

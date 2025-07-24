@@ -142,9 +142,59 @@ app.post('/bodyweight', auth, async (req, res) => {
   }
 });
 
+// Weightlifting workout routes
+app.get('/weightlifting', auth, (req, res) => {
+  res.render('Pages/weightlifting');
+});
+
+app.post('/weightlifting', auth, async (req, res) => {
+  const { workoutname, exercisename, sets, reps, weight } = req.body;
+  try {
+    await db.none(
+      'INSERT INTO weightliftinglogs (workoutname, date, workoutduration, exercise_categories, exercise_name, sets, reps, weight) VALUES ($1, CURRENT_DATE, 0, $2, $3, $4, $5, $6)',
+      [workoutname, 'Weightlifting', exercisename, sets, reps, weight]
+    );
+    res.redirect('/weightlifting');
+  } catch (err) {
+    console.error('Weightlifting log error:', err);
+    res.redirect('/weightlifting');
+  }
+});
+
 // Milestones page
-app.get('/milestones', auth, (req, res) => {
-  res.render('Pages/milestones');
+app.get('/milestones', auth, async (req, res) => {
+  try {
+    const counts = await db.any(
+      `SELECT exercise_categories AS category, COUNT(*) AS count
+       FROM workoutlogs
+       WHERE user_id = $1
+       GROUP BY exercise_categories`,
+      [req.session.user.id]
+    );
+    const progress = {
+      Cardio: 0,
+      Weightlifting: 0,
+      Calisthenics: 0,
+    };
+    counts.forEach((c) => {
+      progress[c.category] = parseInt(c.count, 10);
+    });
+
+    const pct = (val) => Math.min(100, val * 10);
+
+    res.render('Pages/milestones', {
+      cardio: pct(progress.Cardio),
+      weightlifting: pct(progress.Weightlifting),
+      calisthenics: pct(progress.Calisthenics),
+    });
+  } catch (err) {
+    console.error('Milestones error:', err);
+    res.render('Pages/milestones', {
+      cardio: 0,
+      weightlifting: 0,
+      calisthenics: 0,
+    });
+  }
 });
 
 // Movement library using ExerciseDB
@@ -170,8 +220,54 @@ app.get('/exercise/:id', auth, async (req, res) => {
 });
 
 // Calendar page
-app.get('/calendar', auth, (req, res) => {
-  res.render('Pages/calendar');
+app.get('/calendar', auth, async (req, res) => {
+  try {
+    const logs = await db.any(
+      'SELECT * FROM workoutlogs WHERE user_id = $1 ORDER BY date DESC',
+      [req.session.user.id]
+    );
+    res.render('Pages/calendar', { logs });
+  } catch (err) {
+    console.error('Fetch calendar error:', err);
+    res.render('Pages/calendar', { logs: [] });
+  }
+});
+
+// Log a workout
+app.post('/log-workout', auth, async (req, res) => {
+  const {
+    workoutname,
+    date,
+    workoutduration,
+    category,
+    sets,
+    reps,
+    weight,
+    distance,
+  } = req.body;
+
+  try {
+    await db.none(
+      `INSERT INTO workoutlogs
+       (user_id, workoutname, date, workoutduration, exercise_categories, sets, reps, weight, distance)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [
+        req.session.user.id,
+        workoutname,
+        date,
+        workoutduration,
+        category,
+        sets || null,
+        reps || null,
+        weight || null,
+        distance || null,
+      ]
+    );
+    res.redirect('/calendar');
+  } catch (err) {
+    console.error('Workout log error:', err);
+    res.redirect('/');
+  }
 });
    
 

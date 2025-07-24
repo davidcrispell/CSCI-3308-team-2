@@ -12,3 +12,30 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Exercise search for workout logging
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('exercisename');
+  const list = document.getElementById('exercise_suggestions');
+  if (input && list) {
+    input.addEventListener('input', async (e) => {
+      const q = e.target.value.trim();
+      if (q.length < 2) {
+        list.innerHTML = '';
+        return;
+      }
+      try {
+        const res = await fetch('/api/exercises?q=' + encodeURIComponent(q));
+        const data = await res.json();
+        list.innerHTML = '';
+        (data.exercises || []).forEach(ex => {
+          const opt = document.createElement('option');
+          opt.value = ex.name;
+          list.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Search error', err);
+      }
+    });
+  }
+});
+

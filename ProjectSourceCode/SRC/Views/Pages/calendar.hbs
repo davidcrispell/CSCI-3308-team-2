@@ -31,17 +31,14 @@
                     </tr>
                   </thead>
                   <tbody id="workout_logs">
-                    <!-- Workout logs will be dynamically inserted here -->
-                      <tr>
-                        <td>{{date}}</td>
-                        <td>{{workoutname}}</td>
-                        <td>{{workoutduration}} minutes</td>
-                        <td>{{exercise_categories}}</td>
-                        <td>
-                          <button class="btn btn-danger btn-sm" onclick="deleteWorkout({{id}})">Delete</button>
-                          <button class="btn btn-secondary btn-sm" onclick="editWorkout({{id}})">Edit</button>
-                        </td>
-                      </tr>
+                    {{#each logs}}
+                    <tr>
+                      <td>{{date}}</td>
+                      <td>{{workoutname}}</td>
+                      <td>{{workoutduration}} minutes</td>
+                      <td>{{exercise_categories}}</td>
+                    </tr>
+                    {{/each}}
                   </tbody>
                 </table>
               </div>
@@ -84,15 +81,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form id="event_form">
+            <form id="event_form" method="POST" action="/log-workout">
               <div class="mb-3">
                 <label for="event_name" class="form-label">Workout Name</label>
-                <input type="text" class="form-control" id="event_name" required>
+                <input type="text" class="form-control" name="workoutname" id="event_name" required>
               </div>
               <div class="mb-3">
                 <label for="event_category" class="form-label">Exercise Categories</label>
-                <select class="form-select" id="event_category" required>
-                  <option value="">Select category</option>
+                <select class="form-select" name="category" id="event_category" required>
                   <option value="Cardio">Cardio</option>
                   <option value="Weightlifting">Weightlifting</option>
                   <option value="Calisthenics">Calisthenics</option>
@@ -100,22 +96,33 @@
               </div>
               <div class="mb-3">
                 <label for="event_date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="event_date" required>
-              </div>
-
+                <input type="date" class="form-control" name="date" id="event_date" required>
               </div>
               <div class="mb-3">
-                <label for="event_time" class="form-label">Time</label>
-                <input type="time" class="form-control" id="event_time" required>
+                <label for="event_duration" class="form-label">Duration (minutes)</label>
+                <input type="number" class="form-control" name="workoutduration" id="event_duration" required>
               </div>
-                <div class="mb-3">
-                    <label for="event_duration" class="form-label">Duration (minutes)</label>
-                    <input type="number" class="form-control" id="event_duration" required>     
+              <div class="mb-3">
+                <label for="event_sets" class="form-label">Sets</label>
+                <input type="number" class="form-control" name="sets" id="event_sets">
+              </div>
+              <div class="mb-3">
+                <label for="event_reps" class="form-label">Reps</label>
+                <input type="number" class="form-control" name="reps" id="event_reps">
+              </div>
+              <div class="mb-3">
+                <label for="event_weight" class="form-label">Weight (lbs)</label>
+                <input type="number" step="0.1" class="form-control" name="weight" id="event_weight">
+              </div>
+              <div class="mb-3">
+                <label for="event_distance" class="form-label">Distance (miles)</label>
+                <input type="number" step="0.01" class="form-control" name="distance" id="event_distance">
+              </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="saveEvent()">Save Workout</button>
+            <button type="submit" form="event_form" class="btn btn-primary">Save Workout</button>
           </div>
         </div>
       </div>

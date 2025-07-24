@@ -55,8 +55,32 @@ const auth = (req, res, next) => {
 // ------------------ Routes ------------------
 
 // Home page (protected)
-app.get('/', auth, (req, res) => {
-  res.render('Pages/home', { user: req.session.user });
+app.get('/', auth, async (req, res) => {
+  try {
+    const logs = await db.any(
+      `SELECT workoutname, date
+       FROM workoutlogs
+       WHERE user_id = $1 AND date >= CURRENT_DATE - INTERVAL '6 days'
+       ORDER BY date`,
+      [req.session.user.id]
+    );
+
+    const week = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      const dayLogs = logs.filter(
+        (l) => l.date.toISOString().split('T')[0] === ds
+      );
+      week.push({ date: ds, logs: dayLogs });
+    }
+
+    res.render('Pages/home', { user: req.session.user, week });
+  } catch (err) {
+    console.error('Home fetch error:', err);
+    res.render('Pages/home', { user: req.session.user, week: [] });
+  }
 });
 
 
@@ -238,23 +262,6 @@ app.get('/api/exercises', auth, async (req, res) => {
   }
 });
 
-// Calendar page
-app.get('/calendar', auth, async (req, res) => {
-  try {
-    const logs = await db.any(
-      `SELECT w.*, c.notes
-       FROM workoutlogs w
-       JOIN calendar_days c ON c.id = w.calendar_day_id
-       WHERE w.user_id = $1
-       ORDER BY w.date DESC`,
-      [req.session.user.id]
-    );
-    res.render('Pages/calendar', { logs, logsJson: JSON.stringify(logs) });
-  } catch (err) {
-    console.error('Fetch calendar error:', err);
-    res.render('Pages/calendar', { logs: [] });
-  }
-});
 
 // Log a workout
 app.post('/log-workout', auth, async (req, res) => {
@@ -303,7 +310,7 @@ app.post('/log-workout', auth, async (req, res) => {
         distance || null,
       ]
     );
-    res.redirect('/calendar');
+    res.redirect('/');
   } catch (err) {
     console.error('Workout log error:', err);
     res.redirect('/');

@@ -47,6 +47,11 @@ const auth = (req, res, next) => {
   next();
 };
 
+// Simple JSON route used for automated tests
+app.get('/welcome', (req, res) => {
+  res.json({ status: 'success', message: 'Welcome!' });
+});
+
 // ------------------ Routes ------------------
 
 // Home page (protected)
@@ -184,6 +189,8 @@ app.get('/logout', (req, res) => {
 });
 
 // ------------------ Server ------------------
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+module.exports = server;

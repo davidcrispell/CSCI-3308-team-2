@@ -202,6 +202,28 @@ app.get('/milestones', auth, async (req, res) => {
   }
 });
 
+// Movement library using ExerciseDB
+app.get('/movement-library', auth, async (req, res) => {
+  const query = req.query.q || '';
+  try {
+    const exercises = query ? await exercisedb.searchExercises(query) : [];
+    res.render('Pages/movement_library', { exercises, query });
+  } catch (err) {
+    console.error('ExerciseDB error:', err.message);
+    res.render('Pages/movement_library', { exercises: [], query, error: 'Failed to fetch exercises' });
+  }
+});
+
+app.get('/exercise/:id', auth, async (req, res) => {
+  try {
+    const exercise = await exercisedb.getExerciseById(req.params.id);
+    res.render('Pages/exercise_detail', { exercise });
+  } catch (err) {
+    console.error('ExerciseDB fetch error:', err.message);
+    res.redirect('/movement-library');
+  }
+});
+
 // API endpoint for live exercise search
 app.get('/api/exercises', auth, async (req, res) => {
   const q = req.query.q || '';

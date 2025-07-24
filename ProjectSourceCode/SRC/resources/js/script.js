@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   if (calendarEl) {
     var events = Array.isArray(window.workoutLogs)
-      ? window.workoutLogs.map(log => ({ title: log.workoutname, start: log.date }))
+      ? window.workoutLogs.map(log => ({
+          title: log.workoutname,
+          start: log.date,
+          extendedProps: { notes: log.notes }
+        }))
+
       : [];
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
@@ -15,7 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
         center: 'title',
         right: ''
       },
-      events: events
+      events: events,
+      eventClick: function(info) {
+        if (info.event.extendedProps.notes) {
+          alert(info.event.title + '\n' + info.event.extendedProps.notes);
+        }
+      }
+
     });
     calendar.render();
   }

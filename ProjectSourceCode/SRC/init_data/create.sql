@@ -7,10 +7,19 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 
+-- Table for storing per-day calendar details
+CREATE TABLE IF NOT EXISTS calendar_days (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  notes TEXT
+);
+
 -- Table for storing workout logs
 CREATE TABLE IF NOT EXISTS workoutlogs (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  calendar_day_id INTEGER REFERENCES calendar_days(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
   workoutduration SMALLINT NOT NULL,

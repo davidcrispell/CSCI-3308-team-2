@@ -242,7 +242,11 @@ app.get('/api/exercises', auth, async (req, res) => {
 app.get('/calendar', auth, async (req, res) => {
   try {
     const logs = await db.any(
-      'SELECT * FROM workoutlogs WHERE user_id = $1 ORDER BY date DESC',
+      `SELECT w.*, c.notes
+       FROM workoutlogs w
+       JOIN calendar_days c ON c.id = w.calendar_day_id
+       WHERE w.user_id = $1
+       ORDER BY w.date DESC`,
       [req.session.user.id]
     );
     res.render('Pages/calendar', { logs, logsJson: JSON.stringify(logs) });
@@ -266,12 +270,29 @@ app.post('/log-workout', auth, async (req, res) => {
   } = req.body;
 
   try {
+    // Ensure calendar day exists
+    let dayId;
+    const existing = await db.oneOrNone(
+      'SELECT id FROM calendar_days WHERE user_id = $1 AND date = $2',
+      [req.session.user.id, date]
+    );
+    if (existing) {
+      dayId = existing.id;
+    } else {
+      const ins = await db.one(
+        'INSERT INTO calendar_days (user_id, date) VALUES ($1, $2) RETURNING id',
+        [req.session.user.id, date]
+      );
+      dayId = ins.id;
+    }
+
     await db.none(
       `INSERT INTO workoutlogs
-       (user_id, workoutname, date, workoutduration, exercise_categories, sets, reps, weight, distance)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+       (user_id, calendar_day_id, workoutname, date, workoutduration, exercise_categories, sets, reps, weight, distance)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         req.session.user.id,
+        dayId,
         workoutname,
         date,
         workoutduration,

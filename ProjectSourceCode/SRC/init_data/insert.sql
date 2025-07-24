@@ -71,9 +71,14 @@ VALUES
   );
 
 -- Sample workout log linked to user
+-- Sample calendar day and workout log linked to user
+INSERT INTO calendar_days (user_id, date, notes)
+VALUES (1, '2023-10-03', 'Sample Workout logged');
+
 INSERT INTO workoutlogs
   (
     user_id,
+    calendar_day_id,
     workoutname,
     date,
     workoutduration,
@@ -86,6 +91,7 @@ INSERT INTO workoutlogs
 VALUES
   (
     1,
+    1,
     'Sample Workout',
     '2023-10-03',
     30,
@@ -95,3 +101,4 @@ VALUES
     NULL,
     3.0
   );
+

@@ -5,8 +5,17 @@
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   if (calendarEl) {
+    var events = Array.isArray(window.workoutLogs)
+      ? window.workoutLogs.map(log => ({ title: log.workoutname, start: log.date }))
+      : [];
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+      },
+      events: events
     });
     calendar.render();
   }

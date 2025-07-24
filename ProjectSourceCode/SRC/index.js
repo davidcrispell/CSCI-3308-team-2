@@ -26,7 +26,6 @@ const db = pgp({
 
 // ------------------ Middleware ------------------
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'resources')));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -34,9 +33,15 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use('/resources', express.static(path.join(__dirname, 'resources')));
+
+const staticPath = path.join(__dirname, 'ProjectSource/SRC/resources');
+console.log('Serving static files from', staticPath);
+app.use('/resources', express.static(staticPath));
 
 // ------------------ View Engine ------------------
 const { engine } = require('express-handlebars');
+const { stat } = require('fs');
 app.engine('hbs', engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'Views'));

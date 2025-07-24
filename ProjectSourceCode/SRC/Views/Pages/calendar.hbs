@@ -16,10 +16,10 @@
       </div>
       <div class="col">
         <div class="container-md container-fluid py-4 h-100">
-          <div id="calendar" class="row h-100">
+         
             <div class="col-12">
               <h1 class="text-center">Workout Log</h1>
-              <div class="table-responsive">
+                <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                   <thead>
                     <tr>
@@ -46,11 +46,35 @@
                 </table>
               </div>
             </div>
+          
+        </div>
+      </div>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.1/main.min.css" rel="stylesheet" />
+
+    <div class="row">
+      <div class="col-2">
+      </div>
+      <div class="col">
+        <div class="container-md container-fluid py-4 h-100">
+          <div class="row h-100">
+            <div class="col-12">
+              <h1 class="text-center">Calendar</h1>
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- Place the calendar below the table -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div id="calendar"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    
     <!-- Modal -->
     <div class="modal fade" id="event_modal" tabindex="-1" aria-labelledby="event_modal_label" aria-hidden="true">
       <div class="modal-dialog">
@@ -99,6 +123,8 @@
 
     <!-- Bootstrap & Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="resources/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.1/main.min.js"></script>
+    <script src="/resources/js/script.js"></script>
+    
   </body>
 </html>

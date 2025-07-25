@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const pgp = require('pg-promise')();
 const bcrypt = require('bcryptjs');
 const exercisedb = require('./exercisedb');
+const fs = require('fs');
 require('dotenv').config();
 
 // ------------------ Express Setup ------------------
@@ -23,6 +24,15 @@ const db = pgp({
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
 });
+
+// ------------------ Run create.sql on startup ------------------
+const initSql = fs.readFileSync(path.join(__dirname, 'init_data/create.sql'), 'utf8');
+db.none(initSql)
+  .then(() => console.log('✅ Database initialized'))
+  .catch((err) => {
+    console.error('❌ Database initialization failed:', err);
+    process.exit(1);
+  });
 
 // ------------------ Middleware ------------------
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +51,6 @@ app.use('/resources', express.static(staticPath));
 
 // ------------------ View Engine ------------------
 const { engine } = require('express-handlebars');
-const { stat } = require('fs');
 app.engine('hbs', engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'Views'));
@@ -82,13 +91,11 @@ app.get('/', auth, async (req, res) => {
       week,
       weekJson: JSON.stringify(week),
     });
-
   } catch (err) {
     console.error('Home fetch error:', err);
     res.render('Pages/home', { user: req.session.user, week: [] });
   }
 });
-
 
 // Register GET
 app.get('/register', (req, res) => {
@@ -129,7 +136,7 @@ app.post('/login', async (req, res) => {
     const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
     if (user && await bcrypt.compare(password, user.password)) {
       req.session.user = { id: user.id, name: user.name, email: user.email };
-      res.redirect('/'); // or res.redirect('/dashboard') if you have one
+      res.redirect('/');
     } else {
       res.redirect('/login');
     }
@@ -268,7 +275,6 @@ app.get('/api/exercises', auth, async (req, res) => {
   }
 });
 
-
 // Log a workout
 app.post('/log-workout', auth, async (req, res) => {
   const {
@@ -283,7 +289,6 @@ app.post('/log-workout', auth, async (req, res) => {
   } = req.body;
 
   try {
-    // Ensure calendar day exists
     let dayId;
     const existing = await db.oneOrNone(
       'SELECT id FROM calendar_days WHERE user_id = $1 AND date = $2',
@@ -322,7 +327,6 @@ app.post('/log-workout', auth, async (req, res) => {
     res.redirect('/');
   }
 });
-   
 
 // Logout
 app.get('/logout', (req, res) => {

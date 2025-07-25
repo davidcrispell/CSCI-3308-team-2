@@ -67,7 +67,7 @@ VALUES
   (
     'John Doe',
     'fake@gmail.com',
-    '1234'
+    '$2b$10$8d.kcQ43ru0HFH.OIabNTeEOnlRr/3L4gjLv7ppffV2BxF.GtCoDW' -- Fixed dummy user account, the issue was bcrypt so I hashed 1234
   );
 
 -- Sample workout log linked to user

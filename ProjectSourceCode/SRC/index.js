@@ -67,7 +67,7 @@ const auth = (req, res, next) => {
 app.get('/', auth, async (req, res) => {
   try {
     const logs = await db.any(
-      `SELECT workoutname, date, workoutduration, exercise_categories,
+      `SELECT workoutname, exercise_name, date, workoutduration, exercise_categories,
               sets, reps, weight, distance
        FROM workoutlogs
        WHERE user_id = $1 AND date >= CURRENT_DATE - INTERVAL '6 days'
@@ -295,6 +295,7 @@ app.get('/api/exercises', auth, async (req, res) => {
 app.post('/log-workout', auth, async (req, res) => {
   const {
     workoutname,
+    exercisename,
     date,
     workoutduration,
     category,
@@ -322,12 +323,13 @@ app.post('/log-workout', auth, async (req, res) => {
 
     await db.none(
       `INSERT INTO workoutlogs
-       (user_id, calendar_day_id, workoutname, date, workoutduration, exercise_categories, sets, reps, weight, distance)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+       (user_id, calendar_day_id, workoutname, exercise_name, date, workoutduration, exercise_categories, sets, reps, weight, distance)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
         req.session.user.id,
         dayId,
         workoutname,
+        exercisename || null,
         date,
         workoutduration || null,
         category,

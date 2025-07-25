@@ -113,3 +113,44 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+// Adjust form fields shown based on workout category
+document.addEventListener('DOMContentLoaded', function () {
+  const category = document.getElementById('category');
+  if (!category) return;
+
+  const cardioFields = document.querySelectorAll('.cardio-field');
+  const strengthFields = document.querySelectorAll('.strength-field');
+  const weightFields = document.querySelectorAll('.weightlifting-field');
+
+  const update = () => {
+    const val = category.value;
+
+    cardioFields.forEach((el) => {
+      el.style.display = val === 'Cardio' ? '' : 'none';
+      if (val !== 'Cardio') {
+        el.querySelectorAll('input').forEach((i) => (i.value = ''));
+      }
+    });
+
+    strengthFields.forEach((el) => {
+      el.style.display = val === 'Weightlifting' || val === 'Calisthenics' ? '' : 'none';
+      if (val !== 'Weightlifting' && val !== 'Calisthenics') {
+        el.querySelectorAll('input').forEach((i) => (i.value = ''));
+      }
+    });
+
+    weightFields.forEach((el) => {
+      el.style.display = val === 'Weightlifting' ? '' : 'none';
+      if (val !== 'Weightlifting') {
+        el.querySelectorAll('input').forEach((i) => (i.value = ''));
+      }
+    });
+
+    const duration = document.getElementById('duration');
+    if (duration) duration.required = val === 'Cardio';
+  };
+
+  category.addEventListener('change', update);
+  update();
+});
+

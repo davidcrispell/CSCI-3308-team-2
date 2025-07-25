@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   calendar_day_id INTEGER REFERENCES calendar_days(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
+  exercise_name VARCHAR(100),
   date DATE NOT NULL,
   workoutduration SMALLINT,  -- nullable
   exercise_categories VARCHAR(100) NOT NULL,
@@ -77,5 +78,16 @@ BEGIN
           AND is_nullable = 'NO'
   ) THEN
     ALTER TABLE weightliftinglogs ALTER COLUMN workoutduration DROP NOT NULL;
+  END IF;
+END$$;
+
+-- Ensure exercise_name column exists in workoutlogs
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name='workoutlogs' AND column_name='exercise_name'
+  ) THEN
+    ALTER TABLE workoutlogs ADD COLUMN exercise_name VARCHAR(100);
   END IF;
 END$$;

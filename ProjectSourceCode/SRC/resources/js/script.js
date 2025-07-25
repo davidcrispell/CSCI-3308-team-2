@@ -89,8 +89,11 @@ document.addEventListener('DOMContentLoaded', function () {
           const items = data.logs
             .map((log) => {
               const details = [];
-              if (log.exercise_name) details.push(log.exercise_name);
-              if (log.exercise_categories) details.push(log.exercise_categories);
+              if (log.exercise_name) {
+                details.push(log.exercise_name);
+              } else if (log.exercise_categories) {
+                details.push(log.exercise_categories);
+              }
               if (log.workoutduration) details.push(log.workoutduration + ' min');
               if (log.sets) details.push(log.sets + ' sets');
               if (log.reps) details.push(log.reps + ' reps');

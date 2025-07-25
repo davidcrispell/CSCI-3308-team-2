@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL
 );
 
-
 -- Table for storing per-day calendar details
 CREATE TABLE IF NOT EXISTS calendar_days (
   id SERIAL PRIMARY KEY,
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   calendar_day_id INTEGER REFERENCES calendar_days(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
-  workoutduration SMALLINT,
+  workoutduration SMALLINT,  -- nullable
   exercise_categories VARCHAR(100) NOT NULL,
   sets SMALLINT,
   reps SMALLINT,
@@ -30,6 +29,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   distance FLOAT
 );
 
+-- Table for storing cardio workouts
 CREATE TABLE IF NOT EXISTS cardiologs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
@@ -39,11 +39,12 @@ CREATE TABLE IF NOT EXISTS cardiologs (
   distance FLOAT NOT NULL
 );
 
+-- Table for storing weightlifting workouts
 CREATE TABLE IF NOT EXISTS weightliftinglogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
-  workoutduration SMALLINT NOT NULL,
+  workoutduration SMALLINT,  -- changed to nullable
   exercise_categories VARCHAR(100),
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,
@@ -51,6 +52,7 @@ CREATE TABLE IF NOT EXISTS weightliftinglogs (
   weight FLOAT NOT NULL
 );
 
+-- Table for storing bodyweight exercises
 CREATE TABLE IF NOT EXISTS bodyweightlogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
@@ -58,3 +60,22 @@ CREATE TABLE IF NOT EXISTS bodyweightlogs (
   sets SMALLINT NOT NULL,
   reps SMALLINT NOT NULL
 );
+-- Ensure workoutduration is nullable
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name='workoutlogs' AND column_name='workoutduration'
+          AND is_nullable = 'NO'
+  ) THEN
+    ALTER TABLE workoutlogs ALTER COLUMN workoutduration DROP NOT NULL;
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name='weightliftinglogs' AND column_name='workoutduration'
+          AND is_nullable = 'NO'
+  ) THEN
+    ALTER TABLE weightliftinglogs ALTER COLUMN workoutduration DROP NOT NULL;
+  END IF;
+END$$;

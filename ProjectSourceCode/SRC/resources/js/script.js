@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (calendarEl) {
     var events = Array.isArray(window.workoutLogs)
       ? window.workoutLogs.map(log => ({
-          title: log.workoutname,
+          title: log.exercise_name || log.workoutname,
           start: log.date,
           extendedProps: { notes: log.notes }
         }))
@@ -96,13 +96,13 @@ document.addEventListener('DOMContentLoaded', function () {
               if (log.reps) details.push(log.reps + ' reps');
               if (log.weight) details.push(log.weight + ' lbs');
               if (log.distance) details.push(log.distance + ' miles');
-              return (
-                '<li><strong>' +
-                log.workoutname +
-                '</strong> - ' +
-                details.join(', ') +
-                '</li>'
-              );
+                return (
+                  '<li><strong>' +
+                  (log.exercise_name || log.workoutname) +
+                  '</strong> - ' +
+                  details.join(', ') +
+                  '</li>'
+                );
             })
             .join('');
           body.innerHTML = '<ul>' + items + '</ul>';

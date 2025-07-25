@@ -28,9 +28,9 @@ const db = pgp({
 // ------------------ Run create.sql on startup ------------------
 const initSql = fs.readFileSync(path.join(__dirname, 'init_data/create.sql'), 'utf8');
 db.none(initSql)
-  .then(() => console.log('✅ Database initialized'))
+  .then(() => console.log('database initialized'))
   .catch((err) => {
-    console.error('❌ Database initialization failed:', err);
+    console.error('Database initialization failed:', err);
     process.exit(1);
   });
 

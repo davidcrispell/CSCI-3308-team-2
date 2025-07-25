@@ -313,7 +313,7 @@ app.post('/log-workout', auth, async (req, res) => {
         dayId,
         workoutname,
         date,
-        workoutduration,
+        workoutduration || null,
         category,
         sets || null,
         reps || null,

@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   calendar_day_id INTEGER REFERENCES calendar_days(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
-  workoutduration SMALLINT NOT NULL,
+  workoutduration SMALLINT,
   exercise_categories VARCHAR(100) NOT NULL,
   sets SMALLINT,
   reps SMALLINT,

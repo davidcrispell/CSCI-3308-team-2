@@ -113,3 +113,63 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+// Adjust workout log fields based on selected category
+document.addEventListener('DOMContentLoaded', function () {
+  const category = document.getElementById('category');
+  if (!category) return;
+
+  const durationDiv = document.getElementById('duration_div');
+  const setsDiv = document.getElementById('sets_div');
+  const repsDiv = document.getElementById('reps_div');
+  const weightDiv = document.getElementById('weight_div');
+  const distanceDiv = document.getElementById('distance_div');
+
+  const durationInput = document.getElementById('duration');
+  const setsInput = document.getElementById('sets');
+  const repsInput = document.getElementById('reps');
+  const weightInput = document.getElementById('weight');
+  const distanceInput = document.getElementById('distance');
+
+  function updateFields() {
+    const val = category.value;
+
+    // Reset required flags
+    [durationInput, setsInput, repsInput, weightInput, distanceInput].forEach((i) => {
+      if (i) i.required = false;
+    });
+
+    if (val === 'Cardio') {
+      if (durationDiv) durationDiv.style.display = '';
+      if (distanceDiv) distanceDiv.style.display = '';
+      if (setsDiv) setsDiv.style.display = 'none';
+      if (repsDiv) repsDiv.style.display = 'none';
+      if (weightDiv) weightDiv.style.display = 'none';
+
+      if (durationInput) durationInput.required = true;
+      if (distanceInput) distanceInput.required = true;
+    } else if (val === 'Weightlifting') {
+      if (durationDiv) durationDiv.style.display = 'none';
+      if (distanceDiv) distanceDiv.style.display = 'none';
+      if (setsDiv) setsDiv.style.display = '';
+      if (repsDiv) repsDiv.style.display = '';
+      if (weightDiv) weightDiv.style.display = '';
+
+      if (setsInput) setsInput.required = true;
+      if (repsInput) repsInput.required = true;
+    } else {
+      // Calisthenics or other
+      if (durationDiv) durationDiv.style.display = 'none';
+      if (distanceDiv) distanceDiv.style.display = 'none';
+      if (weightDiv) weightDiv.style.display = 'none';
+      if (setsDiv) setsDiv.style.display = '';
+      if (repsDiv) repsDiv.style.display = '';
+
+      if (setsInput) setsInput.required = true;
+      if (repsInput) repsInput.required = true;
+    }
+  }
+
+  category.addEventListener('change', updateFields);
+  updateFields();
+});
+

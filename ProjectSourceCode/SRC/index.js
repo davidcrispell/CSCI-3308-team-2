@@ -132,14 +132,30 @@ app.get('/signup', (req, res) => {
 // Login POST
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
+  // DEBUG: See what was submitted
+  console.log('Login attempt with:', email, JSON.stringify(password));
+
   try {
+    // USER QUERY
     const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
-    if (user && await bcrypt.compare(password, user.password)) {
-      req.session.user = { id: user.id, name: user.name, email: user.email };
-      res.redirect('/');
-    } else {
-      res.redirect('/login');
+
+    // DEBUG: See what the DB returned
+    console.log('User found:', user);
+
+    if (user) {
+      const match = await bcrypt.compare(password, user.password);
+
+      // DEBUG: Check if the password matched
+      console.log('Password match result:', match);
+
+      if (match) {
+        req.session.user = { id: user.id, name: user.name, email: user.email };
+        return res.redirect('/');
+      }
     }
+
+    res.redirect('/login');
   } catch (err) {
     console.error('Login error:', err);
     res.redirect('/login');

@@ -1,0 +1,26 @@
+The test environment is http://localhost:3000 and is deployed at 
+
+
+
+
+
+Test 1:
+Verifies successful registration flow. Sends a POST to /register with valid unique user info. Expects server to respond with a redirect to /login from /register. 
+
+
+Test 2:
+Verifies handling of duplicate email registration. Sends a POST to /register with an email known to exist in the database. Expects the server to redirect back to /register indicating failure.
+
+
+Test 3:
+Negative test for /register missing fields. Ensures API properly rejects incomplete registration attempts. Sends a POST to /register with empty fields. Uses a special header x-test to trigger test-specific behavior. Expects HTTP 400 (Bad Request) status with text "Missing fields" instead of a redirect.
+
+
+Test 4:
+Integration test verifying user inserted into database. Confirms that a registration request results in a new user record in the database. Sends a POST to /register with test user data and x-test header. Expects HTTP 200 and the response text "User created". Queries the database directly to verify the user exists with the correct name.
+
+Test 5:
+Positive test for /login. Redirects to home after successful login with correct credentials. Sends a GET request to /login. Expects server to respond with HTTP 200 status and an HTML content type, indicating the login form page is correctly rendered.
+
+Test 6:
+Negative test for /login. Verifies handling of invalid login attempts. Sends a POST request to /login with invalid or missing credentials. Expects the server to respond with a direct back to /login or an appropriate error message, indicating authentication failure.

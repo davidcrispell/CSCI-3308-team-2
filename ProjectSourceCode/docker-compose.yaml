@@ -5,10 +5,10 @@ services:
     image: postgres:14
     env_file: .env
     ports:
-      - '5432:5432'  # Expose for local dev
+      - '5432:5432'
     volumes:
-      - group-project-data:/var/lib/postgresql/data 
-      - ./SRC/init_data:/docker-entrypoint-initdb.d
+      - group-project-data:/var/lib/postgresql/data
+      - ./SRC/init_data:/docker-entrypoint-initdb.d:ro  # run init scripts at first startup (read-only)
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
       interval: 5s
@@ -28,7 +28,7 @@ services:
       - '3000:3000'
     volumes:
       - ./:/repository
-    command: 'npm run testandrun'  # Or 'npm run testandrun'
+    command: 'npm run testandrun'
 
 volumes:
-  group-project-data: 
+  group-project-data:

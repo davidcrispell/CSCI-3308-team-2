@@ -18,7 +18,7 @@ const PORT = 3000;
 
 // ------------------ Database Setup ------------------
 const db = pgp({
-  host: process.env.POSTGRES_HOST,
+  host: process.env.POSTGRES_HOST || 'localhost',
   port: 5432,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -30,8 +30,7 @@ const initSql = fs.readFileSync(path.join(__dirname, 'init_data/create.sql'), 'u
 db.none(initSql)
   .then(() => console.log('database initialized'))
   .catch((err) => {
-    console.error('Database initialization failed:', err);
-    process.exit(1);
+    console.error('Database initialization failed:', err.message);
   });
 
 // ------------------ Middleware ------------------
@@ -44,10 +43,6 @@ app.use(
   })
 );
 app.use('/resources', express.static(path.join(__dirname, 'resources')));
-
-const staticPath = path.join(__dirname, 'ProjectSource/SRC/resources');
-console.log('Serving static files from', staticPath);
-app.use('/resources', express.static(staticPath));
 
 // ------------------ View Engine ------------------
 const { engine } = require('express-handlebars');

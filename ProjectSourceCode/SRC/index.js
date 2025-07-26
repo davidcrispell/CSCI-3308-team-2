@@ -113,7 +113,7 @@ app.post('/register', async (req, res) => {
       email,
       hash,
     ]);
-    res.redirect('/login');
+    res.redirect('/login?registered=1');
   } catch (err) {
     console.error('Registration error:', err);
     res.redirect('/register');
@@ -122,12 +122,14 @@ app.post('/register', async (req, res) => {
 
 // Login GET
 app.get('/login', (req, res) => {
-  res.render('Pages/login');
+  const registered = req.query.registered === '1';
+  res.render('Pages/login', { registered });
 });
 
 // Alias for Signup links
 app.get('/signup', (req, res) => {
-  res.render('Pages/login');
+  const registered = req.query.registered === '1';
+  res.render('Pages/login', { registered });
 });
 
 // Login POST

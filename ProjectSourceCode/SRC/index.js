@@ -362,6 +362,8 @@ app.get('/logout', (req, res) => {
 });
 
 // ------------------ Server ------------------
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+module.exports = server;

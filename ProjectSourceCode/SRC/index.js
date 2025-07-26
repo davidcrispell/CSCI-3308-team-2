@@ -239,12 +239,16 @@ app.get('/milestones', auth, async (req, res) => {
       progress[c.category] = parseInt(c.count, 10);
     });
 
-    const pct = (val) => Math.min(100, val * 10);
+    const pct = (val) => (val % 10) * 10;
+    const stars = (val) => '⭐'.repeat(Math.floor(val / 10));
 
     res.render('Pages/milestones', {
       cardio: pct(progress.Cardio),
       weightlifting: pct(progress.Weightlifting),
       calisthenics: pct(progress.Calisthenics),
+      cardioStars: stars(progress.Cardio),
+      weightliftingStars: stars(progress.Weightlifting),
+      calisthenicsStars: stars(progress.Calisthenics),
     });
   } catch (err) {
     console.error('Milestones error:', err);

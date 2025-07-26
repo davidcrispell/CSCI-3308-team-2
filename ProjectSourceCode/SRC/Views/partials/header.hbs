@@ -16,7 +16,9 @@
       <nav>
         <ul class="nav justify-content-center">
           <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          {{#unless user}}
           <li class="nav-item"><a class="nav-link" href="/register">Registration</a></li>
+          {{/unless}}
           <li class="nav-item">
             {{#if cardioStar}}
               <span class="me-1 text-warning">&#11088;</span>

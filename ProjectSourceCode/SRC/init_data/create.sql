@@ -1,4 +1,4 @@
--- Table for storing user information
+-- Create users table
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL
 );
 
--- Table for storing per-day calendar details
+-- Create calendar_days
 CREATE TABLE IF NOT EXISTS calendar_days (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS calendar_days (
   notes TEXT
 );
 
--- Table for storing workout logs
+-- Create workoutlogs
 CREATE TABLE IF NOT EXISTS workoutlogs (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   workoutname VARCHAR(100) NOT NULL,
   exercise_name VARCHAR(100),
   date DATE NOT NULL,
-  workoutduration SMALLINT,  -- nullable
+  workoutduration SMALLINT,
   exercise_categories VARCHAR(100) NOT NULL,
   sets SMALLINT,
   reps SMALLINT,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   distance FLOAT
 );
 
--- Table for storing cardio workouts
+-- Cardio, weightlifting, bodyweight logs
 CREATE TABLE IF NOT EXISTS cardiologs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
@@ -40,12 +40,11 @@ CREATE TABLE IF NOT EXISTS cardiologs (
   distance FLOAT NOT NULL
 );
 
--- Table for storing weightlifting workouts
 CREATE TABLE IF NOT EXISTS weightliftinglogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
-  workoutduration SMALLINT,  -- changed to nullable
+  workoutduration SMALLINT,
   exercise_categories VARCHAR(100),
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,
@@ -53,7 +52,6 @@ CREATE TABLE IF NOT EXISTS weightliftinglogs (
   weight FLOAT NOT NULL
 );
 
--- Table for storing bodyweight exercises
 CREATE TABLE IF NOT EXISTS bodyweightlogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
@@ -61,33 +59,3 @@ CREATE TABLE IF NOT EXISTS bodyweightlogs (
   sets SMALLINT NOT NULL,
   reps SMALLINT NOT NULL
 );
--- Ensure workoutduration is nullable
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_name='workoutlogs' AND column_name='workoutduration'
-          AND is_nullable = 'NO'
-  ) THEN
-    ALTER TABLE workoutlogs ALTER COLUMN workoutduration DROP NOT NULL;
-  END IF;
-
-  IF EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_name='weightliftinglogs' AND column_name='workoutduration'
-          AND is_nullable = 'NO'
-  ) THEN
-    ALTER TABLE weightliftinglogs ALTER COLUMN workoutduration DROP NOT NULL;
-  END IF;
-END$$;
-
--- Ensure exercise_name column exists in workoutlogs
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns
-    WHERE table_name='workoutlogs' AND column_name='exercise_name'
-  ) THEN
-    ALTER TABLE workoutlogs ADD COLUMN exercise_name VARCHAR(100);
-  END IF;
-END$$;

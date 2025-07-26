@@ -20,8 +20,9 @@ CREATE TABLE IF NOT EXISTS workoutlogs (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   calendar_day_id INTEGER REFERENCES calendar_days(id) ON DELETE CASCADE,
   workoutname VARCHAR(100) NOT NULL,
+  exercise_name VARCHAR(100),
   date DATE NOT NULL,
-  workoutduration SMALLINT,  -- nullable by default
+  workoutduration SMALLINT,  -- nullable
   exercise_categories VARCHAR(100) NOT NULL,
   sets SMALLINT,
   reps SMALLINT,
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS weightliftinglogs (
   id SERIAL PRIMARY KEY,
   workoutname VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
-  workoutduration SMALLINT,  -- now nullable
+  workoutduration SMALLINT,  -- changed to nullable
   exercise_categories VARCHAR(100),
   exercise_name VARCHAR(100) NOT NULL,
   sets SMALLINT NOT NULL,
@@ -60,30 +61,33 @@ CREATE TABLE IF NOT EXISTS bodyweightlogs (
   sets SMALLINT NOT NULL,
   reps SMALLINT NOT NULL
 );
-
--- Ensure that workoutduration is nullable even on existing schemas
+-- Ensure workoutduration is nullable
 DO $$
 BEGIN
   IF EXISTS (
-    SELECT 1
-      FROM information_schema.columns
-     WHERE table_name = 'workoutlogs'
-       AND column_name = 'workoutduration'
-       AND is_nullable = 'NO'
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name='workoutlogs' AND column_name='workoutduration'
+          AND is_nullable = 'NO'
   ) THEN
-    ALTER TABLE workoutlogs
-      ALTER COLUMN workoutduration DROP NOT NULL;
+    ALTER TABLE workoutlogs ALTER COLUMN workoutduration DROP NOT NULL;
   END IF;
 
   IF EXISTS (
-    SELECT 1
-      FROM information_schema.columns
-     WHERE table_name = 'weightliftinglogs'
-       AND column_name = 'workoutduration'
-       AND is_nullable = 'NO'
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name='weightliftinglogs' AND column_name='workoutduration'
+          AND is_nullable = 'NO'
   ) THEN
-    ALTER TABLE weightliftinglogs
-      ALTER COLUMN workoutduration DROP NOT NULL;
+    ALTER TABLE weightliftinglogs ALTER COLUMN workoutduration DROP NOT NULL;
   END IF;
-END
-$$;
+END$$;
+
+-- Ensure exercise_name column exists in workoutlogs
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name='workoutlogs' AND column_name='exercise_name'
+  ) THEN
+    ALTER TABLE workoutlogs ADD COLUMN exercise_name VARCHAR(100);
+  END IF;
+END$$;

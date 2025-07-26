@@ -1,4 +1,4 @@
--- Insert initial data into weightliftinglogs (columns matching schema)
+-- Insert initial data into weightliftinglogs
 INSERT INTO weightliftinglogs
 (
   workoutname,
@@ -14,8 +14,8 @@ VALUES
 (
   'Morning Workout',
   '2023-10-01',
-  60, -- example duration in minutes
-  'Chest', -- example category
+  60,
+  'Chest',
   'Bench Press',
   4,
   10,
@@ -56,7 +56,7 @@ VALUES
     15
   );
 
--- Insert initial data into users
+-- Insert dummy user
 INSERT INTO users
   (
     name,
@@ -67,14 +67,19 @@ VALUES
   (
     'John Doe',
     'fake@gmail.com',
-    '$2b$10$8d.kcQ43ru0HFH.OIabNTeEOnlRr/3L4gjLv7ppffV2BxF.GtCoDW' -- Fixed dummy user account, the issue was bcrypt so I hashed 1234
+    '1234'
+  ),
+  (
+    'User Two',
+    'q@q',
+    '$2a$10$CDWcitKAzQV2nGb0v7GrROAYI1F7cQP46DKPW6Y9RkRl/ghRHclrm'
   );
 
--- Sample workout log linked to user
--- Sample calendar day and workout log linked to user
+-- Calendar for user 1
 INSERT INTO calendar_days (user_id, date, notes)
 VALUES (1, '2023-10-03', 'Sample Workout logged');
 
+-- Workout log for user 1
 INSERT INTO workoutlogs
   (
     user_id,
@@ -101,4 +106,16 @@ VALUES
     NULL,
     3.0
   );
-
+INSERT INTO calendar_days (user_id, date, notes)
+VALUES
+  (2, '2025-07-20', ''),
+  (2, '2025-07-21', ''),
+  (2, '2025-07-22', ''),
+  (2, '2025-07-23', ''),
+  (2, '2025-07-24', ''),
+  (2, '2025-07-25', 'chest day – lever chest press
+triceps dip
+cardio – run
+weightlifting – lever chest press
+git push – I sit'),
+  (2, '2025-07-26', '');

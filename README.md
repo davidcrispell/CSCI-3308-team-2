@@ -25,3 +25,59 @@ cd ProjectSourceCode
 npm install
 npm start
 ```
+
+
+## Project Directory Structure
+
+CSCI-3308-Final-Project
+- .vs
+- MileStoneSubmissions
+- ProjectSourceCode
+    - SRC
+        - Views
+            - Pages
+                - bodyweight.hbs
+                - cardio.hbs
+                - exercise_detail.hbs
+                - home.hbs
+                - login.hbs
+                - logout.hbs
+                - milestones.hbs
+                - movement_library.hbs
+                - register.hbs
+                - weightlifting.hbs
+                - workouts.hbs
+            - layouts
+                - main.hbs
+            - partials
+                - footer.hbs
+                - header.hbs
+        - init_data
+            - create.sql
+            - initDb.js
+            - insert.sql
+        - resources
+            - css
+                - style.css
+            - img
+                - home.png
+            - js
+                - script.js
+        - test
+            - server.spec.js
+            - TestDescriptions.txt
+      - exercisedb.js
+      - index.js
+      - init_db.sh
+  - node_modules
+  - test
+  - .env
+  - .gitignore
+  - docker-compose.yml
+  - package-lock.json
+  - package.json
+
+
+- TeamMeetingLogs
+- .gitignore
+- README.md

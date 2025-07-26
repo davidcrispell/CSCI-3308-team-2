@@ -10,6 +10,24 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header class="text-center p-3 bg-light border-bottom">
-    <h1>Fitness App</h1>
+  <header class="bg-light border-bottom mb-3">
+    <div class="container">
+      <h1 class="text-center py-2">Fitness App</h1>
+      <nav>
+        <ul class="nav justify-content-center">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          {{#unless user}}
+          <li class="nav-item"><a class="nav-link" href="/register">Registration</a></li>
+          {{/unless}}
+          <li class="nav-item">
+            {{#if cardioStar}}
+              <span class="me-1 text-warning">&#11088;</span>
+            {{/if}}
+            <a class="nav-link" href="/milestones">Milestones</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/movement-library">Movement Library</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>

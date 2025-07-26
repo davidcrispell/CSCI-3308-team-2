@@ -1,0 +1,23 @@
+<div class="container" style="max-width: 700px;">
+  <h2 class="text-center mb-4">Movement Library</h2>
+  <form method="get" action="/movement-library" class="mb-4">
+    <input type="text" name="q" placeholder="Search exercises" class="form-control mb-2" value="{{query}}">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+  {{#if error}}
+    <p class="text-danger">{{error}}</p>
+  {{/if}}
+  {{#if exercises.length}}
+    <ul class="list-group">
+      {{#each exercises}}
+        <li class="list-group-item">
+          <h5><a href="/exercise/{{exerciseId}}">{{name}}</a></h5>
+          <p><strong>Target:</strong> {{targetMuscles}}</p>
+          <p><strong>Equipment:</strong> {{equipments}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No exercises found.</p>
+  {{/if}}
+</div>

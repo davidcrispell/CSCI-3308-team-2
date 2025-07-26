@@ -13,6 +13,7 @@ From **Signup**, you are prompted to access **Registration** and vice versa.
 
 
 In **Milestones**, the user can view their progress across various trees: calisthenics, cardio, weightlifting, and fitness metrics.
+Every ten logged exercises in a category awards a ⭐ star and the progress bar for that category resets to zero to track the next milestone.
 These trees should be animated graphs, duolingo style (but simpler) with progression of various achievements (calisthenics skills, cardio stats ,etc). These pages pull data from each user's workout logs in the database.
 In **Movement Library**, there is a searchable library of exercises powered by [ExerciseDB](https://www.exercisedb.dev/). Use the search bar to find movements by name, muscle group or equipment and view detailed instructions.
 In **Calendar**, there is a calendar populated with user workout data pulled from the database.

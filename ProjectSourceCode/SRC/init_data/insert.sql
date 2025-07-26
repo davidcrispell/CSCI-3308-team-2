@@ -1,6 +1,6 @@
 -- Insert users
 INSERT INTO users (name, email, password) VALUES
-  ('John Doe', 'fake@gmail.com', '1234') 
+  ('John Doe', 'fake@gmail.com', '$2b$10$8d.kcQ43ru0HFH.OIabNTeEOnlRr/3L4gjLv7ppffV2BxF.GtCoDW') 
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO users (name, email, password) VALUES

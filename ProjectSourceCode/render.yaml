@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: calendar-workout-web
+    env: docker
+    plan: free
+    autoDeploy: true
+    buildCommand: ""   # Dockerfile handles build
+    startCommand: ""   # Defined in docker-compose (npm start)
+    dockerContext: .
+    dockerfilePath: Dockerfile  # if needed; omit if Compose handles it
+
+  - type: pserv
+    name: calendar-workout-db
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: Dockerfile  # if using custom Dockerfile; omit if base Postgres
+    dockerComposeFilePath: docker-compose.yaml
+    serviceName: db

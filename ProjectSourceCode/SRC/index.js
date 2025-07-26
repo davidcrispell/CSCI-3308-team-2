@@ -34,6 +34,21 @@ db.none(initSql)
     process.exit(1);
   });
 
+// ------------------ Ensure calendar_day_id exists ------------------
+db.none(`
+  DO $$
+  BEGIN
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_name = 'workoutlogs' AND column_name = 'calendar_day_id'
+    ) THEN
+      ALTER TABLE workoutlogs ADD COLUMN calendar_day_id INTEGER;
+    END IF;
+  END $$;
+`)
+  .then(() => console.log('Ensured column calendar_day_id exists in workoutlogs'))
+  .catch((err) => console.error('DB patch error:', err));
+
 // ------------------ Middleware ------------------
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
@@ -48,7 +63,6 @@ app.use('/resources', express.static(path.join(__dirname, 'resources')));
 const staticPath = path.join(__dirname, 'ProjectSource/SRC/resources');
 console.log('Serving static files from', staticPath);
 app.use('/resources', express.static(staticPath));
-
 
 // ------------------ View Engine ------------------
 const { engine } = require('express-handlebars');
@@ -67,7 +81,6 @@ const auth = (req, res, next) => {
 app.get('/welcome', (req, res) => {
   res.json({ status: 'success', message: 'Welcome!' });
 });
-
 
 // Home page (protected)
 app.get('/', auth, async (req, res) => {
@@ -108,12 +121,9 @@ app.get('/register', (req, res) => {
   res.render('Pages/register');
 });
 
-
 // Register POST
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
-
-  // optional field checks omitted for brevity
 
   const hash = await bcrypt.hash(password, 10);
 
@@ -123,7 +133,6 @@ app.post('/register', async (req, res) => {
       [name, email, hash]
     );
 
-    // Return testable response if request is from test file
     if (req.headers['x-test']) {
       return res.status(200).send('User created');
     }
@@ -139,7 +148,6 @@ app.post('/register', async (req, res) => {
     res.redirect('/register');
   }
 });
-
 
 // Login GET
 app.get('/login', (req, res) => {
@@ -157,20 +165,16 @@ app.get('/signup', (req, res) => {
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  // DEBUG: See what was submitted
   console.log('Login attempt with:', email, JSON.stringify(password));
 
   try {
-    // USER QUERY
     const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
 
-    // DEBUG: See what the DB returned
     console.log('User found:', user);
 
     if (user) {
       const match = await bcrypt.compare(password, user.password);
 
-      // DEBUG: Check if the password matched
       console.log('Password match result:', match);
 
       if (match) {
@@ -382,12 +386,9 @@ app.get('/logout', (req, res) => {
   });
 });
 
-
 app.get('/test', (req, res) => {
   res.redirect('/login');
 });
-
-
 
 // ------------------ Server ------------------
 if (process.env.NODE_ENV !== 'test') {

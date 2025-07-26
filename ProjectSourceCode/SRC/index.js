@@ -49,6 +49,25 @@ const staticPath = path.join(__dirname, 'ProjectSource/SRC/resources');
 console.log('Serving static files from', staticPath);
 app.use('/resources', express.static(staticPath));
 
+// Middleware to determine if the user has earned a cardio star
+app.use(async (req, res, next) => {
+  if (req.session && req.session.user) {
+    try {
+      const result = await db.one(
+        'SELECT COUNT(*) FROM workoutlogs WHERE user_id = $1 AND exercise_categories = $2',
+        [req.session.user.id, 'Cardio']
+      );
+      res.locals.cardioStar = parseInt(result.count, 10) >= 3;
+    } catch (err) {
+      console.error('Star calc error:', err);
+      res.locals.cardioStar = false;
+    }
+  } else {
+    res.locals.cardioStar = false;
+  }
+  next();
+});
+
 // ------------------ View Engine ------------------
 const { engine } = require('express-handlebars');
 app.engine('hbs', engine({ extname: '.hbs' }));

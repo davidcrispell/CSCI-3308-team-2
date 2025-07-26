@@ -7,7 +7,7 @@ services:
     ports:
       - '5432:5432'  # Expose for local dev
     volumes:
-      - group-project-data:/var/lib/postgresql/data  # 🔥 renamed to force reinit
+      - group-project-data:/var/lib/postgresql/data 
       - ./SRC/init_data:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
